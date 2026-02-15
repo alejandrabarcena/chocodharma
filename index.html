@@ -3,105 +3,526 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chocodharma - Manifiesto</title>
+    <title>Chocodharma</title>
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <script src="/_sdk/element_sdk.js"></script>
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Cormorant+Garamond:wght@300;400;500;600&amp;display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&amp;family=Lora:wght@600;700&amp;display=swap"
       rel="stylesheet"
     />
     <style>
-      @keyframes float {
-        0%,
-        100% {
-          transform: translateY(0) rotate(0deg);
+      .font-display { font-family: 'Playfair Display', serif; font-weight: 700; }
+      .font-display-italic { font-family: 'Playfair Display', serif; font-weight: 600; font-style: italic; }
+      .font-body { font-family: 'Lora', serif; font-weight: 600; }
+      .text-shadow-gold { text-shadow: 0 0 40px rgba(253, 243, 18, 0.5); }
+
+      /* Navigation */
+      .hamburger {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1001;
+        cursor: pointer;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        background: none;
+        border: none;
+        padding: 0;
+      }
+
+      .hamburger span {
+        width: 1.8rem;
+        height: 0.25rem;
+        background-color: #fdf312;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translateY(0.65rem);
+      }
+
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translateY(-0.65rem);
+      }
+
+      .mobile-menu {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(135deg, rgba(102, 31, 216, 0.95) 0%, rgba(0, 1, 2, 0.98) 100%);
+        backdrop-blur-md;
+        z-index: 1000;
+        transition: left 0.3s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+      }
+
+      .mobile-menu.active {
+        left: 0;
+      }
+
+      .mobile-menu-item {
+        font-size: 1.75rem;
+        margin: 1.5rem 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        font-family: 'Playfair Display', serif;
+        letter-spacing: 0.1em;
+      }
+
+      .mobile-menu-item:hover {
+        transform: scale(1.1);
+        text-shadow: 0 0 20px rgba(253, 243, 18, 0.6);
+      }
+
+      @media (min-width: 769px) {
+        .hamburger {
+          display: none;
         }
-        50% {
-          transform: translateY(-20px) rotate(5deg);
+        .mobile-menu {
+          display: none !important;
         }
       }
-      @keyframes pulse-glow {
-        0%,
-        100% {
-          opacity: 0.3;
-          transform: scale(1);
-        }
-        50% {
-          opacity: 0.8;
-          transform: scale(1.1);
-        }
+
+      /* Hero Section */
+      .hero-section {
+        min-height: 100%;
+        background: linear-gradient(135deg, rgba(102, 31, 216, 0.1) 0%, rgba(0, 1, 2, 0.8) 100%);
+        position: relative;
+        overflow: hidden;
       }
-      @keyframes gradient-shift {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
+
+      .hero-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100%;
+        padding: 3rem 2rem;
+        text-align: center;
+        position: relative;
+        z-index: 10;
       }
-      @keyframes slide-in-left {
+
+      .logo-img {
+        max-width: 600px;
+        width: 90%;
+        height: auto;
+        margin-bottom: 2rem;
+        object-fit: contain;
+        animation: fadeInDown 0.8s ease;
+      }
+
+      .logo-text {
+        font-size: 4rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        margin-bottom: 1rem;
+        animation: fadeInDown 0.8s ease 0.2s backwards;
+      }
+
+      .tagline {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+        max-width: 800px;
+        line-height: 1.8;
+        animation: fadeInUp 0.8s ease 0.4s backwards;
+      }
+
+      @keyframes fadeInDown {
         from {
-          transform: translateX(-100px);
           opacity: 0;
+          transform: translateY(-30px);
         }
         to {
-          transform: translateX(0);
           opacity: 1;
+          transform: translateY(0);
         }
       }
-      .animate-float {
-        animation: float 6s ease-in-out infinite;
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
-      .animate-float-delayed {
-        animation: float 6s ease-in-out infinite;
-        animation-delay: 2s;
+
+      /* Sections */
+      .section-container {
+        padding: 4rem 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
       }
-      .animate-pulse-glow {
-        animation: pulse-glow 4s ease-in-out infinite;
-      }
-      .gradient-animate {
-        background-size: 200% 200%;
-        animation: gradient-shift 8s ease infinite;
-      }
-      .font-display {
-        font-family: "Playfair Display", serif;
-      }
-      .font-body {
-        font-family: "Cormorant Garamond", serif;
-      }
-      .text-shadow-gold {
-        text-shadow: 0 0 40px rgba(253, 243, 18, 0.5);
-      }
-      .card-glow {
-        box-shadow: 0 0 60px rgba(230, 5, 231, 0.3),
-          inset 0 1px 0 rgba(253, 243, 18, 0.1);
-      }
-      .manifesto-verse {
+
+      .section-title {
+        font-size: 3rem;
+        text-align: center;
+        margin-bottom: 2rem;
         position: relative;
+        display: inline-block;
+        width: 100%;
+      }
+
+      .section-divider {
+        width: 4rem;
+        height: 2px;
+        margin: 1rem auto 2rem;
+        background: linear-gradient(90deg, transparent, #fdf312, transparent);
+      }
+
+      .text-block {
+        margin: 1.5rem auto;
+        max-width: 900px;
+        line-height: 1.8;
+        font-size: 1.1rem;
+      }
+
+      .highlight-text {
+        color: #fdf312;
+        text-shadow: 0 0 20px rgba(253, 243, 18, 0.3);
+        font-style: italic;
+      }
+
+      .mission-item {
+        background: rgba(102, 31, 216, 0.2);
+        border-left: 4px solid #d605e7;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+        color: #fdf312;
+      }
+
+      .mission-item:hover {
+        background: rgba(102, 31, 216, 0.3);
+        box-shadow: 0 0 30px rgba(230, 5, 231, 0.2);
+      }
+
+      .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      .value-card {
+        background: linear-gradient(135deg, rgba(102, 31, 216, 0.2) 0%, rgba(0, 84, 221, 0.1) 100%);
+        border: 1px solid #661fd8;
+        border-radius: 1rem;
+        padding: 2rem;
+        transition: all 0.3s ease;
+      }
+
+      .value-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 0 40px rgba(230, 5, 231, 0.3);
+      }
+
+      .value-title {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: #fdf312;
+      }
+
+      .value-content {
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      .manifesto-section {
+        background: linear-gradient(135deg, rgba(102, 31, 216, 0.15) 0%, rgba(237, 28, 19, 0.05) 100%);
+        border: 1px solid #661fd8;
+        border-radius: 2rem;
+        padding: 3rem 2rem;
+        margin: 2rem 0;
+        position: relative;
+      }
+
+      .manifesto-text {
+        max-width: 900px;
+        margin: 0 auto;
+        font-size: 1.1rem;
+        line-height: 1.9;
+      }
+
+      .manifesto-verse {
+        font-style: italic;
+        margin: 1.5rem 0;
         padding-left: 2rem;
-        border-left: 3px solid #fdf312;
-        animation: slide-in-left 0.8s ease-out forwards;
+        border-left: 3px solid #d605e7;
+        color: #0054dd;
       }
-      .manifesto-verse:nth-child(1) {
-        animation-delay: 0.1s;
+
+      .manifesto-section-title {
+        font-size: 1.8rem;
+        margin: 2rem 0 1rem 0;
+        color: #fdf312;
       }
-      .manifesto-verse:nth-child(2) {
-        animation-delay: 0.2s;
+
+      .nav-button {
+        background: linear-gradient(135deg, #d605e7 0%, #661fd8 100%);
+        color: #fdf312;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 0.5rem;
+        font-family: 'Playfair Display', serif;
+        font-size: 1rem;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+        text-transform: uppercase;
       }
-      .manifesto-verse:nth-child(3) {
-        animation-delay: 0.3s;
+
+      .nav-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 30px rgba(230, 5, 231, 0.4);
       }
-      .manifesto-verse:nth-child(4) {
-        animation-delay: 0.4s;
+
+      /* Chocolate Card Gallery */
+      .chocolate-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1.5rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 0 60px rgba(230, 5, 231, 0.3);
+        border: 1px solid #661fd8;
+        background: linear-gradient(135deg, rgba(102, 31, 216, 0.2) 0%, rgba(0, 1, 2, 0.8) 100%);
+        cursor: pointer;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
       }
-      .manifesto-verse:nth-child(5) {
-        animation-delay: 0.5s;
+
+      .chocolate-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 0 80px rgba(230, 5, 231, 0.5);
       }
-      .manifesto-verse:nth-child(6) {
-        animation-delay: 0.6s;
+
+      .chocolate-image-container {
+        width: 100%;
+        height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(102, 31, 216, 0.1) 0%, rgba(0, 1, 2, 0.5) 100%);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .chocolate-image {
+        width: auto;
+        height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+        transition: transform 0.4s ease;
+      }
+
+      .chocolate-card:hover .chocolate-image {
+        transform: scale(1.08);
+      }
+
+      .chocolate-content {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .chocolate-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .chocolate-card:hover .chocolate-title {
+        color: #fdf312;
+        text-shadow: 0 0 20px rgba(253, 243, 18, 0.6);
+      }
+
+      .chocolate-description {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+        flex-grow: 1;
+      }
+
+      .chocolate-jewel-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        width: fit-content;
+      }
+
+      .view-details {
+        w-full;
+        py-2;
+        px-4;
+        rounded-lg;
+        font-family: 'Playfair Display', serif;
+        font-size: 0.875rem;
+        letter-spacing: 0.125em;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 1, 2, 0.95);
+        backdrop-filter: blur(5px);
+      }
+
+      .modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background: linear-gradient(135deg, rgba(102, 31, 216, 0.3) 0%, rgba(0, 1, 2, 0.95) 100%);
+        border: 1px solid #661fd8;
+        border-radius: 2rem;
+        padding: 2rem;
+        max-width: 600px;
+        width: 90%;
+        max-height: 90%;
+        overflow-y: auto;
+        position: relative;
+        box-shadow: 0 0 100px rgba(230, 5, 231, 0.4);
+        animation: slideUp 0.3s ease;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+        color: #fdf312;
+        transition: all 0.3s ease;
+      }
+
+      .modal-close:hover {
+        transform: rotate(90deg) scale(1.2);
+      }
+
+      .modal-image {
+        width: 100%;
+        height: 400px;
+        object-fit: contain;
+        border-radius: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .modal-title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #fdf312;
+      }
+
+      .modal-badge {
+        display: inline-block;
+        padding: 0.6rem 1.2rem;
+        border-radius: 0.5rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+      }
+
+      .modal-description {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+      }
+
+      .modal-details {
+        border-top: 1px solid #661fd8;
+        padding-top: 1.5rem;
+      }
+
+      .modal-detail-item {
+        margin-bottom: 1rem;
+      }
+
+      .modal-detail-label {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.3rem;
+      }
+
+      .modal-detail-value {
+        font-size: 1.1rem;
+        color: #fdf312;
+      }
+
+      @media (max-width: 768px) {
+        .logo-text {
+          font-size: 2.5rem;
+        }
+        .tagline {
+          font-size: 1.1rem;
+        }
+        .section-title {
+          font-size: 2rem;
+        }
+        .text-block {
+          font-size: 1rem;
+        }
+        .chocolate-image-container {
+          height: 350px;
+        }
+        .section-container {
+          padding: 3rem 2rem;
+        }
       }
     </style>
     <style>
@@ -111,1157 +532,558 @@
     </style>
     <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
   </head>
-  <body class="h-full font-body">
+  <body class="h-full font-body" style="background-color: #000102">
     <div
       id="app-wrapper"
       class="w-full h-full overflow-auto"
-      style="
-        background-color: #000002;
-        background-image: radial-gradient(
-            circle at 20% 80%,
-            rgba(230, 5, 231, 0.08) 0%,
-            transparent 50%
-          ),
-          radial-gradient(
-            circle at 80% 20%,
-            rgba(0, 84, 221, 0.08) 0%,
-            transparent 50%
-          ),
-          radial-gradient(
-            circle at 50% 50%,
-            rgba(102, 31, 216, 0.05) 0%,
-            transparent 60%
-          );
-      "
+      style="background-color: #000102"
     >
-      <!-- Floating Decorative Elements -->
-      <div class="fixed inset-0 pointer-events-none overflow-hidden">
-        <div class="absolute top-20 left-10 w-32 h-32 opacity-20 animate-float">
-          <svg viewbox="0 0 100 100" class="w-full h-full">
-            <circle
-              cx="50"
-              cy="50"
-              r="45"
-              fill="none"
-              stroke="#fdf312"
-              stroke-width="0.5"
-            />
-            <circle
-              cx="50"
-              cy="50"
-              r="35"
-              fill="none"
-              stroke="#d605e7"
-              stroke-width="0.5"
-            />
-            <circle
-              cx="50"
-              cy="50"
-              r="25"
-              fill="none"
-              stroke="#fdf312"
-              stroke-width="0.5"
-            />
-            <path
-              d="M50 5 L50 95 M5 50 L95 50 M15 15 L85 85 M85 15 L15 85"
-              stroke="#0054dd"
-              stroke-width="0.3"
-            />
-          </svg>
-        </div>
-        <div
-          class="absolute top-40 right-20 w-24 h-24 opacity-15 animate-float-delayed"
-        >
-          <svg viewbox="0 0 100 100" class="w-full h-full">
-            <polygon
-              points="50,5 61,40 97,40 68,62 79,97 50,75 21,97 32,62 3,40 39,40"
-              fill="none"
-              stroke="#ed1c13"
-              stroke-width="0.8"
-            />
-          </svg>
-        </div>
-        <div
-          class="absolute bottom-40 left-20 w-20 h-20 opacity-10 animate-pulse-glow"
-        >
-          <svg viewbox="0 0 100 100" class="w-full h-full">
-            <circle cx="50" cy="50" r="40" fill="#d605e7" />
-          </svg>
-        </div>
-      </div>
-      <!-- Navigation -->
-      <nav
-        class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b"
-        style="background-color: rgba(0, 0, 2, 0.8); border-color: #661fd8"
-      >
-        <div
-          class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center"
-        >
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10">
-              <svg viewbox="0 0 100 100" class="w-full h-full">
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="45"
-                  fill="none"
-                  stroke="#fdf312"
-                  stroke-width="2"
-                />
-                <path
-                  d="M50 20 Q65 35 50 50 Q35 65 50 80 Q65 65 50 50 Q35 35 50 20"
-                  fill="#ed1c13"
-                  opacity="0.8"
-                />
-                <circle cx="50" cy="35" r="5" fill="#d605e7" />
-              </svg>
-            </div>
-            <span
-              class="font-display text-xl tracking-wider"
-              style="color: #fdf312"
-              >CHOCODHARMA</span
-            >
-          </div>
-          <div class="hidden md:flex gap-8 text-lg">
-            <a
-              href="#manifesto"
-              class="transition-colors"
-              style="color: #0054dd"
-              >Manifiesto</a
-            >
-            <a href="#essence" class="transition-colors" style="color: #0054dd"
-              >Esencia</a
-            >
-            <a href="#vision" class="transition-colors" style="color: #0054dd"
-              >Camino</a
-            >
-            <a href="#values" class="transition-colors" style="color: #0054dd"
-              >Valores</a
-            >
-          </div>
-        </div>
-      </nav>
-      <!-- Hero Section -->
-      <header
-        class="min-h-screen flex items-center justify-center relative px-6 pt-20"
-      >
-        <div
-          class="absolute inset-0 gradient-animate"
-          style="
-            background: linear-gradient(
-              -45deg,
-              rgba(230, 5, 231, 0.2),
-              rgba(0, 84, 221, 0.2),
-              rgba(237, 28, 19, 0.1),
-              rgba(102, 31, 216, 0.1)
-            );
-            background-size: 200% 200%;
-          "
-        ></div>
-        <div class="text-center z-10 max-w-4xl">
-          <div class="mb-12">
-            <svg viewbox="0 0 200 200" class="w-48 h-48 mx-auto mb-8">
-              <ellipse
-                cx="100"
-                cy="170"
-                rx="60"
-                ry="15"
-                fill="#fdf312"
-                opacity="0.3"
-              />
-              <circle cx="100" cy="80" r="25" fill="#ed1c13" />
-              <ellipse cx="100" cy="130" rx="35" ry="45" fill="#661fd8" />
-              <circle
-                cx="100"
-                cy="75"
-                r="20"
-                fill="none"
-                stroke="#d605e7"
-                stroke-width="1.5"
-              />
-              <circle cx="100" cy="60" r="3" fill="#fdf312" />
-              <path
-                d="M85 85 Q100 95 115 85"
-                fill="none"
-                stroke="#fdf312"
-                stroke-width="1"
-              />
-              <path
-                d="M40 160 Q70 140 100 160 Q70 150 40 160"
-                fill="#0054dd"
-                opacity="0.6"
-              />
-              <path
-                d="M160 160 Q130 140 100 160 Q130 150 160 160"
-                fill="#0054dd"
-                opacity="0.6"
-              />
-              <path
-                d="M55 165 Q80 145 100 165 Q75 155 55 165"
-                fill="#d605e7"
-                opacity="0.8"
-              />
-              <path
-                d="M145 165 Q120 145 100 165 Q125 155 145 165"
-                fill="#d605e7"
-                opacity="0.8"
-              />
-              <circle
-                cx="100"
-                cy="80"
-                r="50"
-                fill="none"
-                stroke="#fdf312"
-                stroke-width="0.5"
-                stroke-dasharray="3,3"
-              />
-              <circle
-                cx="100"
-                cy="80"
-                r="60"
-                fill="none"
-                stroke="#0054dd"
-                stroke-width="0.3"
-                stroke-dasharray="5,5"
-              />
-            </svg>
-          </div>
-          <h1
-            id="hero-title"
-            class="font-display text-7xl md:text-8xl mb-4 tracking-wider text-shadow-gold"
+      <button id="hamburger" class="hamburger" aria-label="Menú">
+        <span></span> <span></span> <span></span>
+      </button>
+      <div id="mobile-menu" class="mobile-menu">
+        <nav class="w-full text-center">
+          <a
+            href="#inicio"
+            class="mobile-menu-item scroll-link"
             style="color: #fdf312"
+            >Inicio</a
           >
-            CHOCODHARMA
-          </h1>
-          <p
-            class="text-2xl mb-8 tracking-wide font-light italic"
-            style="color: #d605e7"
-          >
-            "En el principio fue el cacao"
-          </p>
-          <div
-            class="space-y-4 text-lg max-w-2xl mx-auto mb-12"
+          <a
+            href="#galeria"
+            class="mobile-menu-item scroll-link"
             style="color: #0054dd"
+            >Galería</a
           >
-            <p>— Amargo.</p>
-            <p>— Oscuro.</p>
-            <p>— Como la mente antes de despertar.</p>
-          </div>
-          <button
-            id="cta-button"
-            class="px-10 py-4 text-stone-900 font-display text-lg tracking-wider rounded-full transition-all transform hover:scale-105 shadow-lg"
-            style="
-              background: linear-gradient(to right, #fdf312, #d605e7);
-              box-shadow: 0 0 30px rgba(230, 5, 231, 0.5);
-            "
+          <a
+            href="#manifesto"
+            class="mobile-menu-item scroll-link"
+            style="color: #d605e7"
+            >Manifiesto</a
           >
-            Descubre Nuestro Arte
+          <a
+            href="#contacto"
+            class="mobile-menu-item scroll-link"
+            style="color: #ed1c13"
+            >Contacto</a
+          >
+        </nav>
+      </div>
+      <section id="inicio" class="hero-section">
+        <div class="hero-content">
+          <img
+            src="https://raw.githubusercontent.com/alejandrabarcena/chocodharma/refs/heads/main/chocodharma%20logo.jpg"
+            alt="Chocodharma Logo"
+            class="logo-img"
+            loading="lazy"
+            onerror="console.error('Logo failed to load:', this.src); this.style.display='none';"
+          />
+          <h1 class="logo-text" style="color: #fdf312">CHOCODHARMA</h1>
+          <p class="tagline font-display-italic" style="color: #d605e7">
+            Donde la escultura se convierte en ofrenda y el rave se transforma
+            en meditación en movimiento
+          </p>
+          <button class="nav-button scroll-link" data-target="#galeria">
+            Explora la Galería
           </button>
         </div>
-        <div
-          class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce"
-        >
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewbox="0 0 24 24"
-            style="color: #fdf312"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-            />
-          </svg>
+      </section>
+      <section class="section-container">
+        <h2 class="section-title" style="color: #fdf312">Nuestra Historia</h2>
+        <div class="section-divider"></div>
+        <div class="text-block" style="color: #0054dd">
+          <p style="margin-bottom: 1.5rem">
+            <span class="highlight-text">Chocodharma</span> es un delicado
+            universo de esculturas y tabletas de chocolate artesanal, inspirado
+            en la antigua tradición budista y la vibrante cultura rave de Goa.
+            Tallamos figuras budistas en chocolate, y nuestras tabletas están
+            adornadas con arte psicodélico, como un canto que une la
+            espiritualidad, la estética contemporánea y el placer consciente.
+          </p>
+          <p style="margin-bottom: 1.5rem">
+            Este proyecto, un susurro en el viento, fue creado por una persona
+            no binaria en proceso de ordenación dentro de la Comunidad Budista
+            Triratna, donde el arte, el trabajo ético y la práctica espiritual
+            convergen como ríos en el océano.
+          </p>
+          <p>
+            Chocodharma nació como un puente de luz entre devoción y
+            celebración, entre el templo sagrado y la pista de baile, entre el
+            cacao y la contemplación serena. Aquí, el chocolate no es solo
+            dulce: es un símbolo, es energía vital, es una ofrenda sagrada, es
+            una experiencia sublime.
+          </p>
         </div>
-      </header>
-      <!-- Manifesto Section -->
-      <section
-        id="manifesto"
-        class="py-32 px-6"
-        style="
-          background: linear-gradient(
-            to bottom,
-            transparent,
-            rgba(102, 31, 216, 0.1),
-            transparent
-          );
-        "
-      >
-        <div class="max-w-5xl mx-auto">
-          <div class="text-center mb-20">
-            <div class="inline-flex items-center gap-4 mb-6">
-              <div
-                class="w-16 h-px"
-                style="
-                  background: linear-gradient(to right, transparent, #ed1c13);
-                "
-              ></div>
-              <span
-                class="text-sm tracking-[0.3em] uppercase"
-                style="color: #ed1c13"
-                >Nuestro Voto</span
-              >
-              <div
-                class="w-16 h-px"
-                style="
-                  background: linear-gradient(to left, transparent, #ed1c13);
-                "
-              ></div>
-            </div>
-            <h2
-              id="manifesto-title"
-              class="font-display text-6xl mb-4"
-              style="color: #fdf312"
-            >
-              Manifiesto de Marca
-            </h2>
+      </section>
+      <section class="section-container">
+        <h2 class="section-title" style="color: #fdf312">Nuestra Misión</h2>
+        <div class="section-divider"></div>
+        <div style="margin: 2rem 0">
+          <p class="text-block" style="color: #0054dd; margin-bottom: 1.5rem">
+            Nuestra misión es crear una marca de chocolate que entrelace el
+            arte, la espiritualidad y la cultura contemporánea, ofreciendo
+            experiencias sensoriales que despierten la belleza, la imaginación y
+            la conexión interna. Aspiramos a que cada pieza de Chocodharma sea
+            un susurro que demuestre que la iluminación puede ser creativa,
+            inclusiva, colorida y vibrante.
+          </p>
+        </div>
+        <div style="margin: 2rem 0">
+          <h3 class="text-2xl font-display mb-3" style="color: #d605e7">
+            Nuestra Comunidad
+          </h3>
+          <p class="text-block" style="color: #0054dd">
+            Deseamos tejer un tapiz comunitario donde el trabajo, el arte y la
+            espiritualidad convivan de manera ética y transformadora.
+          </p>
+        </div>
+      </section>
+      <section class="section-container">
+        <h2 class="section-title" style="color: #fdf312">Nuestros Valores</h2>
+        <div class="section-divider"></div>
+        <div class="values-grid">
+          <div class="value-card">
+            <h3 class="value-title">Enfoque Ecuménico</h3>
+            <p class="value-content" style="color: #0054dd">
+              No nos limitamos a una única forma de budismo. La espiritualidad
+              oriental, el arte occidental y la cultura rave se entrelazan,
+              creando un despertar contemporáneo.
+            </p>
           </div>
-          <div
-            class="card-glow rounded-3xl p-12 border"
-            style="background: rgba(102, 31, 216, 0.15); border-color: #661fd8"
-          >
-            <!-- Opening -->
-            <div class="space-y-6">
-              <div class="manifesto-verse">
-                <p
-                  class="text-xl italic leading-relaxed"
-                  style="color: #fdf312"
-                >
-                  Chocodharma surge entre el templo y la pista de baile, donde
-                  la escultura se convierte en ofrenda y el rave se transforma
-                  en meditación danzante.
-                </p>
-              </div>
-              <div class="manifesto-verse">
-                <p
-                  class="text-xl italic leading-relaxed"
-                  style="color: #fdf312"
-                >
-                  No creamos chocolate; moldeamos símbolos. Vertemos intención y
-                  solidificamos práctica.
-                </p>
-              </div>
+          <div class="value-card">
+            <h3 class="value-title">Ir al Refugio</h3>
+            <p class="value-content" style="color: #0054dd">
+              Nuestro compromiso es un viaje espiritual que surge de la devoción
+              hacia las Tres Joyas: Buda, Dharma y Sangha. Cada creación es un
+              eco de esta devoción.
+            </p>
+          </div>
+          <div class="value-card">
+            <h3 class="value-title">Trabajo como Práctica</h3>
+            <p class="value-content" style="color: #0054dd">
+              El chocolate se convierte en nuestro sabio maestro. La artesanía,
+              el diseño y la producción son caminos de autodescubrimiento y
+              transformación.
+            </p>
+          </div>
+          <div class="value-card">
+            <h3 class="value-title">El Arte como Dharma</h3>
+            <p class="value-content" style="color: #0054dd">
+              El arte es un lenguaje del alma. Las ilustraciones psicodélicas y
+              los colores vibrantes son puentes hacia la imaginación, la empatía
+              y la expansión interna.
+            </p>
+          </div>
+          <div class="value-card">
+            <h3 class="value-title">Comunidad Unificada</h3>
+            <p class="value-content" style="color: #0054dd">
+              Chocodharma es un espacio seguro donde la creatividad y la
+              espiritualidad florecen sin distinciones de género, orientación o
+              identidad.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="manifesto" class="section-container">
+        <h2 class="section-title" style="color: #fdf312">Nuestro Manifiesto</h2>
+        <div class="section-divider"></div>
+        <div class="manifesto-section">
+          <div class="manifesto-text">
+            <div class="manifesto-verse">
+              Amargo.<br />
+              Oscuro.<br />
+              Como la mente antes de despertar.
             </div>
-            <!-- Three Pillars -->
-            <div
-              class="grid md:grid-cols-3 gap-8 my-12 pt-8"
-              style="border-color: #661fd8; border-top: 1px solid #661fd8"
-            >
-              <div class="text-center">
-                <p class="text-lg font-display mb-3" style="color: #d605e7">
-                  Cada figura budista
-                </p>
-                <p class="italic" style="color: #0054dd">es una pausa.</p>
-              </div>
-              <div class="text-center">
-                <p class="text-lg font-display mb-3" style="color: #d605e7">
-                  Cada barra ilustrada
-                </p>
-                <p class="italic" style="color: #0054dd">es un portal.</p>
-              </div>
-              <div class="text-center">
-                <p class="text-lg font-display mb-3" style="color: #d605e7">
-                  Cada trazo psicodélico
-                </p>
-                <p class="italic" style="color: #0054dd">
-                  es una expansión de la mente.
-                </p>
-              </div>
+            <p style="color: #0054dd; margin: 1.5rem 0">
+              Chocodharma emerge entre el templo y la pista de baile, donde la
+              escultura se convierte en ofrenda y el rave se transforma en
+              meditación en movimiento.
+            </p>
+            <p style="color: #0054dd; margin: 1.5rem 0">
+              No solo creamos chocolate; moldemos símbolos. Vertemos intención y
+              solidificamos la práctica.
+            </p>
+            <div class="manifesto-verse">
+              Cada figura budista es una pausa.<br />
+              Cada barra ilustrada es un portal.<br />
+              Cada trazo psicodélico es una expansión de la mente.
             </div>
-            <!-- Essence -->
-            <div
-              class="manifesto-verse pt-8"
-              style="border-color: #661fd8; border-top: 1px solid #661fd8"
-            >
-              <p class="text-xl font-display mb-4" style="color: #fdf312">
-                🪷 Nuestra Esencia
-              </p>
-              <p class="leading-relaxed mb-4" style="color: #0054dd">
-                No nos limitamos a una sola forma. El Dharma no pertenece a una
-                cultura, ni a una estética fija, ni a un género determinado.
-              </p>
-              <div class="space-y-2 ml-4" style="color: #d605e7">
-                <p>— Somos ecuménicos.</p>
-                <p>— Tomamos la raíz y dejamos las formas rígidas.</p>
-                <p>— Honramos la esencia.</p>
-              </div>
+            <p style="color: #0054dd; margin: 1.5rem 0">
+              Somos una práctica dulce, un mantra comestible, una vibración
+              encarnada.
+            </p>
+            <h3 class="manifesto-section-title">Nuestra Esencia</h3>
+            <p style="color: #0054dd; margin: 1rem 0">
+              No nos restringimos a una sola forma. El Dharma no pertenece a
+              ninguna cultura, ni a una estética fija, ni a un género
+              específico.
+            </p>
+            <div class="manifesto-verse">
+              Somos ecuménicos.<br />
+              Tomamos la raíz y abandonamos las formas rígidas.<br />
+              Honramos la esencia.
             </div>
-            <!-- Three Jewels -->
-            <div
-              class="grid md:grid-cols-3 gap-6 mt-10 pt-8"
-              style="border-color: #661fd8; border-top: 1px solid #661fd8"
-            >
-              <div
-                class="p-6 rounded-lg border"
-                style="
-                  background: rgba(237, 28, 19, 0.1);
-                  border-color: #ed1c13;
-                "
+            <p style="color: #0054dd; margin: 1.5rem 0">
+              En la penumbra del cacao, recordamos al Buda. En la textura que se
+              derrite, recordamos el Dharma. En la comunidad que comparte,
+              recordamos la Sangha.
+            </p>
+            <p style="color: #0054dd; margin: 1.5rem 0">
+              Ir al Refugio no es una ceremonia, es una dirección interna, es
+              orientar la vida hacia lo despierto. Este proyecto es un refugio
+              en forma de arte.
+            </p>
+            <h3 class="manifesto-section-title">Trabajo como Camino</h3>
+            <p style="color: #0054dd; margin: 1rem 0">
+              El molde, la temperatura, el pulido, la ilustración… todo es
+              práctica. El trabajo no es una carga; es energía canalizada, es el
+              gurú que nos confronta, nos pule, nos transforma.
+            </p>
+            <div class="manifesto-verse">
+              Cada lote es disciplina.<br />
+              Cada error es un espejo.<br />
+              Cada pieza es una oportunidad de crecer.
+            </div>
+            <h3 class="manifesto-section-title">El Arte como Dharma</h3>
+            <p style="color: #0054dd; margin: 1rem 0">
+              El arte amplía la mente, refina las emociones, rompe los límites
+              del yo rígido. Las ilustraciones psicodélicas no son un exceso;
+              son una expansión. La cultura Goa no es escapismo; es trance
+              consciente, es ritmo que disuelve el ego.
+            </p>
+            <p style="color: #0054dd; margin: 1.5rem 0">
+              El Buda puede permanecer en silencio... pero también puede vibrar
+              en neón.
+            </p>
+            <h3 class="manifesto-section-title">Comunidad</h3>
+            <p style="color: #0054dd; margin: 1rem 0">
+              Chocodharma es creado por una persona no binaria en proceso de
+              ordenación dentro de la Comunidad Triratna. Aquí no existen
+              jerarquías rígidas, no hay distinción por género, no hay
+              separación por identidad.
+            </p>
+            <p style="color: #0054dd; margin: 1.5rem 0">
+              Solo práctica, solo intención, solo comunidad despierta.
+            </p>
+            <h3 class="manifesto-section-title">Voto Silencioso</h3>
+            <div class="manifesto-verse">
+              Que el cacao sea compasión,<br />
+              que el arte sea un puente,<br />
+              que el trabajo sea transformación,<br />
+              que la belleza refine el corazón.<br /><br />
+              Que cada bocado recuerde:<br /><span
+                style="font-size: 1.2em; color: #fdf312"
+                >la iluminación también puede ser dulce.</span
               >
-                <p
-                  class="text-sm uppercase tracking-widest mb-3"
-                  style="color: #ed1c13"
-                >
-                  En la penumbra del cacao
-                </p>
-                <p class="text-lg" style="color: #fdf312">
-                  recordamos al <span style="color: #d605e7">Buda</span>
-                </p>
-              </div>
-              <div
-                class="p-6 rounded-lg border"
-                style="background: rgba(0, 84, 221, 0.1); border-color: #0054dd"
-              >
-                <p
-                  class="text-sm uppercase tracking-widest mb-3"
-                  style="color: #0054dd"
-                >
-                  En la textura que se derrite
-                </p>
-                <p class="text-lg" style="color: #fdf312">
-                  recordamos el <span style="color: #d605e7">Dharma</span>
-                </p>
-              </div>
-              <div
-                class="p-6 rounded-lg border"
-                style="
-                  background: rgba(102, 31, 216, 0.1);
-                  border-color: #661fd8;
-                "
-              >
-                <p
-                  class="text-sm uppercase tracking-widest mb-3"
-                  style="color: #661fd8"
-                >
-                  En la comunidad que comparte
-                </p>
-                <p class="text-lg" style="color: #fdf312">
-                  recordamos la <span style="color: #d605e7">Sangha</span>
-                </p>
-              </div>
-            </div>
-            <!-- Refuge -->
-            <div
-              class="manifesto-verse pt-8"
-              style="border-color: #661fd8; border-top: 1px solid #661fd8"
-            >
-              <p class="leading-relaxed italic" style="color: #0054dd">
-                Ir al Refugio no es una ceremonia, es una dirección interior, es
-                orientar la vida hacia lo despierto.
-                <span class="block" style="color: #d605e7; margin-top: 0.5rem"
-                  >Este proyecto es un refugio en forma de arte.</span
-                >
-              </p>
             </div>
           </div>
         </div>
       </section>
-      <!-- Work as Path Section -->
-      <section id="essence" class="py-32 px-6">
-        <div class="max-w-6xl mx-auto">
-          <div class="text-center mb-16">
-            <div class="inline-flex items-center gap-4 mb-6">
-              <div
-                class="w-16 h-px"
-                style="
-                  background: linear-gradient(to right, transparent, #0054dd);
-                "
-              ></div>
-              <span
-                class="text-sm tracking-[0.3em] uppercase"
-                style="color: #0054dd"
-                >La Práctica</span
-              >
-              <div
-                class="w-16 h-px"
-                style="
-                  background: linear-gradient(to left, transparent, #0054dd);
-                "
-              ></div>
-            </div>
-            <h2 class="font-display text-5xl mb-8" style="color: #fdf312">
-              🌈 Trabajo como Camino
-            </h2>
-          </div>
-          <div class="grid md:grid-cols-2 gap-12 items-center">
+      <section id="galeria" class="section-container">
+        <h2 class="section-title" style="color: #fdf312">
+          Galería de Chocolates
+        </h2>
+        <div class="section-divider"></div>
+        <div style="text-align: center; margin-bottom: 2rem">
+          <div class="inline-flex items-center gap-4 mb-3">
             <div
-              class="card-glow rounded-3xl p-10 border"
-              style="background: rgba(230, 5, 231, 0.15); border-color: #d605e7"
-            >
-              <p class="text-lg leading-relaxed mb-6" style="color: #0054dd">
-                El molde, la temperatura, el pulido, la ilustración… todo es
-                práctica.
-              </p>
-              <p class="leading-relaxed mb-6 italic" style="color: #fdf312">
-                El trabajo no es carga; es energía canalizada, es el gurú que
-                nos confronta, nos pule, nos transforma.
-              </p>
-              <p class="mb-4" style="color: #0054dd">
-                No producimos por ambición; creamos por coherencia.
-              </p>
-              <div class="space-y-3 ml-4" style="color: #d605e7">
-                <p>✦ Cada lote es disciplina.</p>
-                <p>✦ Cada error es espejo.</p>
-                <p>✦ Cada pieza es una oportunidad de crecer.</p>
-              </div>
-            </div>
-            <div class="relative">
-              <svg viewbox="0 0 300 350" class="w-full">
-                <defs>
-                  <lineargradient
-                    id="grad-cacao"
-                    x1="0%"
-                    y1="0%"
-                    x2="100%"
-                    y2="100%"
-                  >
-                    <stop
-                      offset="0%"
-                      style="stop-color: #ed1c13; stop-opacity: 1"
-                    />
-                    <stop
-                      offset="100%"
-                      style="stop-color: #661fd8; stop-opacity: 1"
-                    />
-                  </lineargradient>
-                </defs>
-                <!-- Temperature -->
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="45"
-                  fill="none"
-                  stroke="#fdf312"
-                  stroke-width="2"
-                />
-                <circle cx="60" cy="60" r="30" fill="#0054dd" opacity="0.3" />
-                <text
-                  x="60"
-                  y="50"
-                  text-anchor="middle"
-                  fill="#fdf312"
-                  font-size="12"
-                  font-family="serif"
-                >
-                  Temp.
-                </text>
-                <text
-                  x="60"
-                  y="70"
-                  text-anchor="middle"
-                  fill="#fdf312"
-                  font-size="11"
-                  font-family="serif"
-                >
-                  Disciplina
-                </text>
-                <!-- Mold -->
-                <rect
-                  x="170"
-                  y="30"
-                  width="100"
-                  height="80"
-                  rx="5"
-                  fill="none"
-                  stroke="#fdf312"
-                  stroke-width="2"
-                />
-                <rect
-                  x="175"
-                  y="35"
-                  width="90"
-                  height="70"
-                  fill="#d605e7"
-                  opacity="0.3"
-                />
-                <text
-                  x="220"
-                  y="55"
-                  text-anchor="middle"
-                  fill="#fdf312"
-                  font-size="11"
-                  font-family="serif"
-                >
-                  Forma
-                </text>
-                <text
-                  x="220"
-                  y="75"
-                  text-anchor="middle"
-                  fill="#fdf312"
-                  font-size="11"
-                  font-family="serif"
-                >
-                  Intención
-                </text>
-                <!-- Polishing -->
-                <circle
-                  cx="100"
-                  cy="200"
-                  r="45"
-                  fill="none"
-                  stroke="#0054dd"
-                  stroke-width="2"
-                />
-                <path
-                  d="M75 175 Q100 220 125 175"
-                  fill="#ed1c13"
-                  opacity="0.4"
-                />
-                <text
-                  x="100"
-                  y="190"
-                  text-anchor="middle"
-                  fill="#fdf312"
-                  font-size="11"
-                  font-family="serif"
-                >
-                  Pulido
-                </text>
-                <text
-                  x="100"
-                  y="210"
-                  text-anchor="middle"
-                  fill="#fdf312"
-                  font-size="11"
-                  font-family="serif"
-                >
-                  Refinamiento
-                </text>
-                <!-- Illustration -->
-                <rect
-                  x="170"
-                  y="170"
-                  width="100"
-                  height="80"
-                  rx="5"
-                  fill="none"
-                  stroke="#0054dd"
-                  stroke-width="2"
-                />
-                <circle cx="195" cy="190" r="8" fill="#d605e7" opacity="0.6" />
-                <circle cx="220" cy="195" r="6" fill="#d605e7" opacity="0.4" />
-                <circle cx="245" cy="185" r="7" fill="#d605e7" opacity="0.5" />
-                <path
-                  d="M190 215 Q215 220 240 215"
-                  fill="none"
-                  stroke="#fdf312"
-                  stroke-width="1"
-                />
-                <text
-                  x="220"
-                  y="155"
-                  text-anchor="middle"
-                  fill="#fdf312"
-                  font-size="11"
-                  font-family="serif"
-                >
-                  Arte
-                </text>
-                <text
-                  x="220"
-                  y="245"
-                  text-anchor="middle"
-                  fill="#fdf312"
-                  font-size="11"
-                  font-family="serif"
-                >
-                  Expansión
-                </text>
-                <!-- Finished Product -->
-                <g transform="translate(100, 290)">
-                  <rect
-                    x="-40"
-                    y="-25"
-                    width="80"
-                    height="50"
-                    rx="5"
-                    fill="url(#grad-cacao)"
-                  />
-                  <circle cx="-20" cy="0" r="5" fill="#fdf312" opacity="0.7" />
-                  <circle cx="0" cy="5" r="4" fill="#fdf312" opacity="0.6" />
-                  <circle cx="20" cy="-2" r="5" fill="#fdf312" opacity="0.7" />
-                </g>
-                <text
-                  x="150"
-                  y="330"
-                  text-anchor="middle"
-                  fill="#fdf312"
-                  font-size="12"
-                  font-family="serif"
-                  font-weight="bold"
-                >
-                  Transformación
-                </text>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- Art as Dharma Section -->
-      <section
-        id="vision"
-        class="py-32 px-6"
-        style="
-          background: linear-gradient(
-            to bottom,
-            transparent,
-            rgba(0, 84, 221, 0.1),
-            transparent
-          );
-        "
-      >
-        <div class="max-w-6xl mx-auto">
-          <div class="text-center mb-16">
-            <div class="inline-flex items-center gap-4 mb-6">
-              <div
-                class="w-16 h-px"
-                style="
-                  background: linear-gradient(to right, transparent, #d605e7);
-                "
-              ></div>
-              <span
-                class="text-sm tracking-[0.3em] uppercase"
-                style="color: #d605e7"
-                >Lenguaje del Alma</span
-              >
-              <div
-                class="w-16 h-px"
-                style="
-                  background: linear-gradient(to left, transparent, #d605e7);
-                "
-              ></div>
-            </div>
-            <h2 class="font-display text-5xl mb-8" style="color: #fdf312">
-              🎨 El Arte como Dharma
-            </h2>
-          </div>
-          <div
-            class="card-glow rounded-3xl p-12 border"
-            style="background: rgba(0, 84, 221, 0.15); border-color: #0054dd"
-          >
-            <div class="space-y-8">
-              <p
-                class="text-xl leading-relaxed text-center italic"
-                style="color: #fdf312"
-              >
-                El arte amplía la mente, refina las emociones, rompe los límites
-                del yo rígido.
-              </p>
-              <div class="grid md:grid-cols-3 gap-8">
-                <div class="text-center">
-                  <p class="text-3xl mb-4">✨</p>
-                  <p class="text-lg font-display mb-2" style="color: #d605e7">
-                    Ilustraciones Psicodélicas
-                  </p>
-                  <p style="color: #0054dd">No son exceso; son expansión.</p>
-                </div>
-                <div
-                  class="text-center px-8"
-                  style="
-                    border-left: 1px solid #661fd8;
-                    border-right: 1px solid #661fd8;
-                  "
-                >
-                  <p class="text-3xl mb-4">🌀</p>
-                  <p class="text-lg font-display mb-2" style="color: #d605e7">
-                    Cultura Goa
-                  </p>
-                  <p style="color: #0054dd">
-                    No es escapismo; es trance consciente.
-                  </p>
-                </div>
-                <div class="text-center">
-                  <p class="text-3xl mb-4">🪷</p>
-                  <p class="text-lg font-display mb-2" style="color: #d605e7">
-                    El Buda Vibrante
-                  </p>
-                  <p style="color: #0054dd">
-                    Puede estar en silencio… pero también vibrar en neón.
-                  </p>
-                </div>
-              </div>
-              <p
-                class="text-center text-lg italic pt-8"
-                style="
-                  border-color: #661fd8;
-                  border-top: 1px solid #661fd8;
-                  color: #fdf312;
-                "
-              >
-                "El ritmo que disuelve el ego"
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- Community Section -->
-      <section id="values" class="py-32 px-6">
-        <div class="max-w-6xl mx-auto">
-          <div class="text-center mb-16">
-            <div class="inline-flex items-center gap-4 mb-6">
-              <div
-                class="w-16 h-px"
-                style="
-                  background: linear-gradient(to right, transparent, #ed1c13);
-                "
-              ></div>
-              <span
-                class="text-sm tracking-[0.3em] uppercase"
-                style="color: #ed1c13"
-                >Inclusión</span
-              >
-              <div
-                class="w-16 h-px"
-                style="
-                  background: linear-gradient(to left, transparent, #ed1c13);
-                "
-              ></div>
-            </div>
-            <h2 class="font-display text-5xl mb-8" style="color: #fdf312">
-              🌿 Comunidad
-            </h2>
-          </div>
-          <div class="grid md:grid-cols-2 gap-12 items-center">
-            <div class="relative">
-              <svg viewbox="0 0 300 300" class="w-full">
-                <defs>
-                  <radialgradient id="mandala-grad" cx="50%" cy="50%" r="50%">
-                    <stop
-                      offset="0%"
-                      style="stop-color: #fdf312; stop-opacity: 0.4"
-                    />
-                    <stop
-                      offset="100%"
-                      style="stop-color: #ed1c13; stop-opacity: 0.1"
-                    />
-                  </radialgradient>
-                </defs>
-                <!-- Main circles -->
-                <circle cx="150" cy="150" r="130" fill="url(#mandala-grad)" />
-                <circle
-                  cx="150"
-                  cy="150"
-                  r="130"
-                  fill="none"
-                  stroke="#fdf312"
-                  stroke-width="2"
-                />
-                <circle
-                  cx="150"
-                  cy="150"
-                  r="110"
-                  fill="none"
-                  stroke="#d605e7"
-                  stroke-width="1"
-                  stroke-dasharray="5,5"
-                />
-                <circle
-                  cx="150"
-                  cy="150"
-                  r="90"
-                  fill="none"
-                  stroke="#0054dd"
-                  stroke-width="1.5"
-                />
-                <circle
-                  cx="150"
-                  cy="150"
-                  r="70"
-                  fill="none"
-                  stroke="#fdf312"
-                  stroke-width="1"
-                />
-                <circle
-                  cx="150"
-                  cy="150"
-                  r="50"
-                  fill="none"
-                  stroke="#ed1c13"
-                  stroke-width="1"
-                  stroke-dasharray="3,3"
-                />
-                <!-- Center lotus -->
-                <circle
-                  cx="150"
-                  cy="150"
-                  r="30"
-                  fill="none"
-                  stroke="#d605e7"
-                  stroke-width="1.5"
-                />
-                <circle cx="150" cy="150" r="5" fill="#fdf312" />
-                <!-- Petals radiating -->
-                <g stroke="#fdf312" stroke-width="2" fill="none">
-                  <line x1="150" y1="60" x2="150" y2="40" />
-                  <line x1="150" y1="240" x2="150" y2="260" />
-                  <line x1="60" y1="150" x2="40" y2="150" />
-                  <line x1="240" y1="150" x2="260" y2="150" />
-                </g>
-                <!-- Diagonal rays -->
-                <g
-                  stroke="#661fd8"
-                  stroke-width="1.5"
-                  fill="none"
-                  opacity="0.6"
-                >
-                  <line x1="225" y1="75" x2="240" y2="60" />
-                  <line x1="75" y1="225" x2="60" y2="240" />
-                  <line x1="75" y1="75" x2="60" y2="60" />
-                  <line x1="225" y1="225" x2="240" y2="240" />
-                </g>
-                <!-- Om symbol -->
-                <text
-                  x="150"
-                  y="158"
-                  text-anchor="middle"
-                  fill="#fdf312"
-                  font-size="28"
-                  font-family="serif"
-                  opacity="0.8"
-                >
-                  ॐ
-                </text>
-              </svg>
-            </div>
-            <div class="space-y-8">
-              <div
-                class="card-glow rounded-2xl p-8 border"
-                style="
-                  background: rgba(230, 5, 231, 0.15);
-                  border-color: #d605e7;
-                "
-              >
-                <p
-                  class="text-sm uppercase tracking-[0.2em] mb-3"
-                  style="color: #ed1c13"
-                >
-                  Creado por
-                </p>
-                <p class="text-lg leading-relaxed mb-4" style="color: #0054dd">
-                  Una persona no binaria en proceso de ordenación dentro de la
-                  Comunidad Triratna.
-                </p>
-                <p class="italic" style="color: #fdf312">
-                  "Donde el arte, el trabajo ético y la práctica espiritual
-                  convergen como ríos en el océano."
-                </p>
-              </div>
-              <div class="space-y-4">
-                <p class="text-lg" style="color: #d605e7">Aquí no hay:</p>
-                <div class="space-y-3" style="color: #0054dd">
-                  <p class="flex items-center gap-3">
-                    <span style="color: #ed1c13">✦</span> Jerarquías rígidas
-                  </p>
-                  <p class="flex items-center gap-3">
-                    <span style="color: #ed1c13">✦</span> Distinción por género
-                  </p>
-                  <p class="flex items-center gap-3">
-                    <span style="color: #ed1c13">✦</span> Separación por
-                    identidad
-                  </p>
-                </div>
-              </div>
-              <div
-                class="rounded-xl p-6 border"
-                style="
-                  background: linear-gradient(
-                    135deg,
-                    rgba(230, 5, 231, 0.2),
-                    rgba(0, 84, 221, 0.2)
-                  );
-                  border-color: #661fd8;
-                "
-              >
-                <p
-                  class="text-center text-lg font-display"
-                  style="color: #fdf312"
-                >
-                  Solo práctica,<br />
-                  solo intención,<br /><span style="color: #d605e7"
-                    >solo comunidad despierta.</span
-                  >
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- Final Vow Section -->
-      <section
-        class="py-32 px-6"
-        style="
-          background: linear-gradient(
-            to bottom,
-            transparent,
-            rgba(102, 31, 216, 0.1),
-            transparent
-          );
-        "
-      >
-        <div class="max-w-4xl mx-auto text-center">
-          <div class="inline-flex items-center gap-4 mb-8">
-            <div
-              class="w-16 h-px"
-              style="
-                background: linear-gradient(to right, transparent, #fdf312);
-              "
+              style="width: 4rem; height: 1px; background-color: #ed1c13"
             ></div>
             <span
-              class="text-sm tracking-[0.3em] uppercase"
-              style="color: #fdf312"
-              >El Voto</span
+              class="text-sm tracking-[0.3em] uppercase font-body"
+              style="color: #ed1c13"
+              >Las Tres Joyas</span
             >
             <div
-              class="w-16 h-px"
-              style="background: linear-gradient(to left, transparent, #fdf312)"
+              style="width: 4rem; height: 1px; background-color: #ed1c13"
             ></div>
           </div>
-          <div
-            class="card-glow rounded-3xl p-16 border"
-            style="background: rgba(237, 28, 19, 0.15); border-color: #ed1c13"
-          >
-            <h2 class="font-display text-4xl mb-12" style="color: #fdf312">
-              🍫 Voto Silencioso
-            </h2>
-            <div
-              class="space-y-6 text-xl leading-relaxed"
-              style="color: #0054dd"
-            >
-              <p>
-                Que el <span style="color: #fdf312">cacao</span> sea
-                <span class="italic">compasión</span>,
-              </p>
-              <p>
-                que el <span style="color: #fdf312">arte</span> sea
-                <span class="italic">puente</span>,
-              </p>
-              <p>
-                que el <span style="color: #fdf312">trabajo</span> sea
-                <span class="italic">transformación</span>,
-              </p>
-              <p>
-                que la <span style="color: #fdf312">belleza</span> refine el
-                <span class="italic">corazón</span>.
-              </p>
+          <h3 class="font-display text-4xl" style="color: #fdf312">Triratna</h3>
+          <p class="mt-3 text-lg max-w-2xl mx-auto" style="color: #0054dd">
+            Una colección que honra los tres pilares del camino búdico: el Buda,
+            el Dharma y la Sangha.
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div class="chocolate-card">
+            <div class="chocolate-image-container">
+              <img
+                src="https://raw.githubusercontent.com/alejandrabarcena/chocodharma/refs/heads/main/CHOCO1.jpeg"
+                alt="Buddha - Primera Joya"
+                class="chocolate-image"
+                loading="lazy"
+                onerror="console.error('Image failed:', this.src); this.style.background='#661fd8'; this.alt='Imagen no disponible';"
+              />
             </div>
-            <div
-              class="mt-12 pt-8"
-              style="border-color: #661fd8; border-top: 1px solid #661fd8"
-            >
-              <p class="text-2xl font-display italic" style="color: #d605e7">
-                Que cada bocado recuerde:
-              </p>
-              <p class="text-3xl font-display mt-4" style="color: #fdf312">
-                La iluminación también puede ser dulce.
-              </p>
+            <div class="chocolate-content">
+              <div
+                class="chocolate-jewel-badge"
+                style="
+                  background-color: rgba(102, 31, 216, 0.3);
+                  color: #d605e7;
+                  border: 1px solid #661fd8;
+                "
+              >
+                Primera Joya
+              </div>
+              <div>
+                <h3 class="chocolate-title" style="color: #0054dd">El Buda</h3>
+                <p class="chocolate-description" style="color: #0054dd">
+                  La iluminación encarnada. Cacao puro oscuro con toques de
+                  incienso y meditación.
+                </p>
+              </div>
+              <button
+                class="view-details w-full py-2 px-4 rounded-lg"
+                style="background-color: #d605e7; color: #000102"
+                data-chocolate="buddha"
+              >
+                Ver Detalles
+              </button>
+            </div>
+          </div>
+          <div class="chocolate-card">
+            <div class="chocolate-image-container">
+              <img
+                src="https://raw.githubusercontent.com/alejandrabarcena/chocodharma/refs/heads/main/CHOCO%202.jpeg"
+                alt="Dharma - Segunda Joya"
+                class="chocolate-image"
+                loading="lazy"
+                onerror="console.error('Image failed:', this.src); this.style.background='#0054dd'; this.alt='Imagen no disponible';"
+              />
+            </div>
+            <div class="chocolate-content">
+              <div
+                class="chocolate-jewel-badge"
+                style="
+                  background-color: rgba(0, 84, 221, 0.3);
+                  color: #0054dd;
+                  border: 1px solid #0054dd;
+                "
+              >
+                Segunda Joya
+              </div>
+              <div>
+                <h3 class="chocolate-title" style="color: #fdf312">
+                  El Dharma
+                </h3>
+                <p class="chocolate-description" style="color: #0054dd">
+                  El camino del conocimiento. Cacao con almendras y reflexión
+                  contemplativa.
+                </p>
+              </div>
+              <button
+                class="view-details w-full py-2 px-4 rounded-lg"
+                style="background-color: #0054dd; color: #fdf312"
+                data-chocolate="dharma"
+              >
+                Ver Detalles
+              </button>
+            </div>
+          </div>
+          <div class="chocolate-card">
+            <div class="chocolate-image-container">
+              <img
+                src="https://raw.githubusercontent.com/alejandrabarcena/chocodharma/refs/heads/main/CHOCO%203.jpeg"
+                alt="Sangha - Tercera Joya"
+                class="chocolate-image"
+                loading="lazy"
+                onerror="console.error('Image failed:', this.src); this.style.background='#ed1c13'; this.alt='Imagen no disponible';"
+              />
+            </div>
+            <div class="chocolate-content">
+              <div
+                class="chocolate-jewel-badge"
+                style="
+                  background-color: rgba(237, 28, 19, 0.3);
+                  color: #ed1c13;
+                  border: 1px solid #ed1c13;
+                "
+              >
+                Tercera Joya
+              </div>
+              <div>
+                <h3 class="chocolate-title" style="color: #fdf312">
+                  La Sangha
+                </h3>
+                <p class="chocolate-description" style="color: #0054dd">
+                  La comunidad despierta. Cacao con especias y la calidez del
+                  encuentro compartido.
+                </p>
+              </div>
+              <button
+                class="view-details w-full py-2 px-4 rounded-lg"
+                style="background-color: #ed1c13; color: #fdf312"
+                data-chocolate="sangha"
+              >
+                Ver Detalles
+              </button>
             </div>
           </div>
         </div>
       </section>
-      <!-- Footer -->
-      <footer
-        class="py-16 px-6"
-        style="border-color: #661fd8; border-top: 1px solid #661fd8"
+      <section
+        id="contacto"
+        class="section-container"
+        style="border-top: 1px solid #661fd8; padding-top: 3rem"
       >
-        <div class="max-w-6xl mx-auto text-center">
-          <div class="mb-8">
-            <svg viewbox="0 0 100 100" class="w-16 h-16 mx-auto mb-4">
-              <circle
-                cx="50"
-                cy="50"
-                r="45"
-                fill="none"
-                stroke="#fdf312"
-                stroke-width="1.5"
-              />
-              <path
-                d="M50 20 Q65 35 50 50 Q35 65 50 80 Q65 65 50 50 Q35 35 50 20"
-                fill="#ed1c13"
-                opacity="0.8"
-              />
-              <circle cx="50" cy="35" r="4" fill="#d605e7" />
-            </svg>
-            <p class="font-display text-2xl mb-2" style="color: #fdf312">
-              CHOCODHARMA
-            </p>
-            <p class="italic" style="color: #0054dd">
-              Arte • Espiritualidad • Chocolate
-            </p>
-          </div>
-          <p class="text-sm" style="color: #d605e7">
-            Un proyecto de la Comunidad Budista Triratna
-          </p>
-          <p class="text-xs mt-4" style="color: #661fd8">
-            🪷 Creado con amor y conciencia 🪷
-          </p>
-        </div>
-      </footer>
+        <h2 class="section-title" style="color: #fdf312">
+          Comunidad Chocodharma
+        </h2>
+        <div class="section-divider"></div>
+        <p class="text-block" style="color: #0054dd; text-align: center">
+          Anhelamos tejer un tapiz comunitario donde el trabajo, el arte y la
+          espiritualidad cohabiten de manera ética y transformadora.
+        </p>
+        <p
+          class="text-block font-display-italic"
+          style="color: #d605e7; margin-top: 1rem; text-align: center"
+        >
+          Que cada bocado sea un recordatorio de que la iluminación también
+          puede ser dulce, colorida y vibrante.
+        </p>
+      </section>
+    </div>
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <button class="modal-close" id="modal-close">×</button>
+        <div id="modal-body"></div>
+      </div>
     </div>
     <script>
       const defaultConfig = {
-        hero_title: "CHOCODHARMA",
-        manifesto_title: "Manifiesto de Marca",
-        cta_button: "Descubre Nuestro Arte",
-        background_color: "#000002",
-        surface_color: "#0054dd",
-        text_color: "#fdf312",
-        primary_action_color: "#ed1c13",
-        secondary_action_color: "#d605e7",
-        accent_color: "#661fd8",
+        gallery_title: "GALERÍA",
+        background_color: "#000102",
         font_family: "Playfair Display",
         font_size: 16,
       };
 
-      async function onConfigChange(config) {
-        const heroTitle = document.getElementById("hero-title");
-        const manifestoTitle = document.getElementById("manifesto-title");
-        const ctaButton = document.getElementById("cta-button");
-        const appWrapper = document.getElementById("app-wrapper");
+      const chocolateDetails = {
+        buddha: {
+          name: "El Buda",
+          badge: "Primera Joya",
+          image:
+            "https://raw.githubusercontent.com/alejandrabarcena/chocodharma/refs/heads/main/CHOCO1.jpeg",
+          description:
+            "La iluminación encarnada en cada bocado. Cacao puro oscuro con toques de incienso que evocan la meditación silenciosa.",
+          details: [
+            { label: "Porcentaje Cacao", value: "85%" },
+            { label: "Sabor", value: "Amargo profundo con notas florales" },
+            {
+              label: "Inspiración",
+              value: "El Buda histórico y su iluminación",
+            },
+          ],
+        },
+        dharma: {
+          name: "El Dharma",
+          badge: "Segunda Joya",
+          image:
+            "https://raw.githubusercontent.com/alejandrabarcena/chocodharma/refs/heads/main/CHOCO%202.jpeg",
+          description:
+            "El camino del conocimiento en forma de chocolate. Cacao con almendras tostadas que simbolizan la solidez de la práctica.",
+          details: [
+            { label: "Porcentaje Cacao", value: "72%" },
+            { label: "Sabor", value: "Chocolate suave con notas de almendra" },
+            { label: "Inspiración", value: "Las enseñanzas del Dharma" },
+          ],
+        },
+        sangha: {
+          name: "La Sangha",
+          badge: "Tercera Joya",
+          image:
+            "https://raw.githubusercontent.com/alejandrabarcena/chocodharma/refs/heads/main/CHOCO%203.jpeg",
+          description:
+            "La comunidad despierta compartiendo luz. Cacao con especias que calientan como el encuentro compartido en sangha.",
+          details: [
+            { label: "Porcentaje Cacao", value: "68%" },
+            {
+              label: "Sabor",
+              value: "Chocolate cálido con canela y cardamomo",
+            },
+            {
+              label: "Inspiración",
+              value: "La comunidad budista y sus vínculos",
+            },
+          ],
+        },
+      };
 
-        if (heroTitle)
-          heroTitle.textContent = config.hero_title || defaultConfig.hero_title;
-        if (manifestoTitle)
-          manifestoTitle.textContent =
-            config.manifesto_title || defaultConfig.manifesto_title;
-        if (ctaButton)
-          ctaButton.textContent = config.cta_button || defaultConfig.cta_button;
+      const hamburger = document.getElementById("hamburger");
+      const mobileMenu = document.getElementById("mobile-menu");
 
-        const bgColor =
-          config.background_color || defaultConfig.background_color;
-        const textColor = config.text_color || defaultConfig.text_color;
-        const primaryColor =
-          config.primary_action_color || defaultConfig.primary_action_color;
+      hamburger.addEventListener("click", () => {
+        hamburger.classList.toggle("active");
+        mobileMenu.classList.toggle("active");
+      });
 
-        if (appWrapper) {
-          appWrapper.style.backgroundColor = bgColor;
-        }
-
-        if (heroTitle) heroTitle.style.color = textColor;
-        if (manifestoTitle) manifestoTitle.style.color = textColor;
-
-        if (ctaButton) {
-          ctaButton.style.background = `linear-gradient(to right, ${textColor}, ${
-            config.secondary_action_color ||
-            defaultConfig.secondary_action_color
-          })`;
-        }
-
-        const customFont = config.font_family || defaultConfig.font_family;
-        const baseFontStack = "serif";
-        const displayElements = document.querySelectorAll(
-          ".font-display, h1, h2, h3"
-        );
-        displayElements.forEach((el) => {
-          el.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      document.querySelectorAll(".scroll-link").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const target =
+            link.getAttribute("data-target") || link.getAttribute("href");
+          const element = document.querySelector(target);
+          if (element) {
+            hamburger.classList.remove("active");
+            mobileMenu.classList.remove("active");
+            element.scrollIntoView({ behavior: "smooth" });
+          }
         });
+      });
 
-        const baseSize = config.font_size || defaultConfig.font_size;
-        if (heroTitle) heroTitle.style.fontSize = `${baseSize * 4}px`;
-        if (manifestoTitle) manifestoTitle.style.fontSize = `${baseSize * 3}px`;
+      const modal = document.getElementById("modal");
+      const modalClose = document.getElementById("modal-close");
+      const modalBody = document.getElementById("modal-body");
+
+      document.querySelectorAll(".view-details").forEach((button) => {
+        button.addEventListener("click", () => {
+          const chocolate = button.getAttribute("data-chocolate");
+          const details = chocolateDetails[chocolate];
+
+          modalBody.innerHTML = `
+          <img src="${details.image}" alt="${
+            details.name
+          }" class="modal-image" loading="lazy" onerror="console.error('Modal image failed:', this.src); this.style.background='#661fd8';"/>
+          <div class="modal-badge" style="background-color: rgba(102, 31, 216, 0.3); color: #d605e7; border: 1px solid #661fd8;">
+            ${details.badge}
+          </div>
+          <h2 class="modal-title font-display">${details.name}</h2>
+          <p class="modal-description" style="color: #0054dd;">
+            ${details.description}
+          </p>
+          <div class="modal-details">
+            ${details.details
+              .map(
+                (detail) => `
+              <div class="modal-detail-item">
+                <div class="modal-detail-label" style="color: #d605e7;">${detail.label}</div>
+                <div class="modal-detail-value">${detail.value}</div>
+              </div>
+            `
+              )
+              .join("")}
+          </div>
+        `;
+          modal.classList.add("active");
+        });
+      });
+
+      modalClose.addEventListener("click", () => {
+        modal.classList.remove("active");
+      });
+
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.classList.remove("active");
+        }
+      });
+
+      async function onConfigChange(config) {
+        const appWrapper = document.getElementById("app-wrapper");
+        if (appWrapper) {
+          appWrapper.style.backgroundColor =
+            config.background_color || defaultConfig.background_color;
+        }
       }
 
       function mapToCapabilities(config) {
@@ -1273,38 +1095,6 @@
               set: (value) => {
                 config.background_color = value;
                 window.elementSdk.setConfig({ background_color: value });
-              },
-            },
-            {
-              get: () => config.text_color || defaultConfig.text_color,
-              set: (value) => {
-                config.text_color = value;
-                window.elementSdk.setConfig({ text_color: value });
-              },
-            },
-            {
-              get: () =>
-                config.primary_action_color ||
-                defaultConfig.primary_action_color,
-              set: (value) => {
-                config.primary_action_color = value;
-                window.elementSdk.setConfig({ primary_action_color: value });
-              },
-            },
-            {
-              get: () =>
-                config.secondary_action_color ||
-                defaultConfig.secondary_action_color,
-              set: (value) => {
-                config.secondary_action_color = value;
-                window.elementSdk.setConfig({ secondary_action_color: value });
-              },
-            },
-            {
-              get: () => config.accent_color || defaultConfig.accent_color,
-              set: (value) => {
-                config.accent_color = value;
-                window.elementSdk.setConfig({ accent_color: value });
               },
             },
           ],
@@ -1328,24 +1118,12 @@
 
       function mapToEditPanelValues(config) {
         return new Map([
-          ["hero_title", config.hero_title || defaultConfig.hero_title],
           [
-            "manifesto_title",
-            config.manifesto_title || defaultConfig.manifesto_title,
+            "gallery_title",
+            config.gallery_title || defaultConfig.gallery_title,
           ],
-          ["cta_button", config.cta_button || defaultConfig.cta_button],
         ]);
       }
-
-      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-        anchor.addEventListener("click", function (e) {
-          e.preventDefault();
-          const target = document.querySelector(this.getAttribute("href"));
-          if (target) {
-            target.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
-        });
-      });
 
       if (window.elementSdk) {
         window.elementSdk.init({
@@ -1363,7 +1141,7 @@
           if (b) {
             var d = b.createElement("script");
             d.innerHTML =
-              "window.__CF$cv$params={r:'9ce115eb23c82e7e',t:'MTc3MTExOTUwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+              "window.__CF$cv$params={r:'9ce1708b93842e7e',t:'MTc3MTEyMzIxNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
             b.getElementsByTagName("head")[0].appendChild(d);
           }
         }
